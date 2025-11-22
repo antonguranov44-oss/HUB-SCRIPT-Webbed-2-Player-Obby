@@ -35,7 +35,7 @@ end
 
 -- === GUI CREATION ===
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "WebbedGod_V1.1_Elite"
+ScreenGui.Name = "WebbedGod_V1.2_Fixed"
 ScreenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 ScreenGui.ResetOnSpawn = false
 ScreenGui.IgnoreGuiInset = true
@@ -47,7 +47,7 @@ MainFrame.Size = UDim2.new(0, 520, 0, 360)
 MainFrame.Position = UDim2.new(0.5, -260, 0.5, -180)
 MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
 MainFrame.BorderSizePixel = 0
-MainFrame.ClipsDescendants = true
+MainFrame.ClipsDescendants = true -- ВАЖНО: Обрезает все лишнее
 MainFrame.Active = true 
 MainFrame.Parent = ScreenGui
 
@@ -56,36 +56,33 @@ local Corner = Instance.new("UICorner")
 Corner.CornerRadius = UDim.new(0, 16)
 Corner.Parent = MainFrame
 
--- === ОБВОДКА С ГРАДИЕНТОМ (НОВОЕ!) ===
+-- ОБВОДКА С ГРАДИЕНТОМ
 local Stroke = Instance.new("UIStroke")
-Stroke.Thickness = 3 -- Чуть толще для эффекта
-Stroke.Color = Color3.fromRGB(255, 255, 255) -- Цвет не важен, его перекроет градиент
+Stroke.Thickness = 3
+Stroke.Color = Color3.fromRGB(255, 255, 255)
 Stroke.Parent = MainFrame
 
 local StrokeGradient = Instance.new("UIGradient")
 StrokeGradient.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 60, 90)),   -- Ярко красный
-    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(180, 0, 50)),  -- Темный
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 60, 90))    -- Ярко красный
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 60, 90)),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(180, 0, 50)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 60, 90))
 }
 StrokeGradient.Rotation = 45
 StrokeGradient.Parent = Stroke
 
--- === АНИМИРОВАННЫЙ ФОН (НОВОЕ!) ===
+-- АНИМИРОВАННЫЙ ФОН
 local MainGradient = Instance.new("UIGradient")
 MainGradient.Color = ColorSequence.new{
     ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)),
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(150, 150, 170)) -- Легкий серый отлив
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(150, 150, 170))
 }
 MainGradient.Rotation = 0
 MainGradient.Parent = MainFrame
 
--- Запуск анимации фона
 spawn(function()
     while MainFrame.Parent do
-        -- Медленное вращение градиента
         MainGradient.Rotation = MainGradient.Rotation + 0.2
-        -- Анимация обводки (перелив)
         StrokeGradient.Rotation = StrokeGradient.Rotation - 0.5
         task.wait(0.02)
     end
@@ -120,12 +117,11 @@ TitleText.TextSize = 26
 TitleText.TextStrokeTransparency = 0.8
 TitleText.Parent = TitleBox
 
--- ВЕРСИЯ V1.1
 local VerText = Instance.new("TextLabel")
 VerText.Size = UDim2.new(1, 0, 0, 20)
 VerText.Position = UDim2.new(0,0,0.8,0)
 VerText.BackgroundTransparency = 1
-VerText.Text = "V1.1"
+VerText.Text = "V1.2"
 VerText.TextColor3 = Color3.fromRGB(255, 60, 90)
 VerText.Font = BodyFont
 VerText.TextSize = 12
@@ -156,12 +152,14 @@ Watermark.Font = BodyFont
 Watermark.TextSize = 11
 Watermark.Parent = SideBar
 
--- 3. CONTENT
+-- 3. CONTENT (ГДЕ КНОПКИ)
 local ContentFrame = Instance.new("Frame")
 ContentFrame.Name = "Content"
 ContentFrame.Size = UDim2.new(1, -150, 1, -20)
 ContentFrame.Position = UDim2.new(0, 150, 0, 10)
 ContentFrame.BackgroundTransparency = 1
+-- ВАЖНО: ClipsDescendants тут, чтобы контент не вылезал
+ContentFrame.ClipsDescendants = true 
 ContentFrame.Parent = MainFrame
 
 -- === 🌌 ФИЗИКА ===
@@ -200,17 +198,16 @@ RunService.RenderStepped:Connect(function(dt)
     MainFrame.Rotation = currentRot
 end)
 
--- === ВКЛАДКИ ===
+-- === ВКЛАДКИ (ТЕПЕРЬ ОБЫЧНЫЕ FRAME, НЕ SCROLL) ===
 local Pages = {}
 local TabButtons = {}
 
 local function CreatePage(name)
-    local Page = Instance.new("ScrollingFrame")
+    -- ИЗМЕНЕНО: ScrollingFrame -> Frame
+    local Page = Instance.new("Frame") 
     Page.Name = name.."_Page"
     Page.Size = UDim2.new(1, 0, 1, 0)
     Page.BackgroundTransparency = 1
-    Page.ScrollBarThickness = 3
-    Page.ScrollBarImageColor3 = Color3.fromRGB(255, 60, 90)
     Page.Visible = false
     Page.Parent = ContentFrame
     
@@ -221,7 +218,9 @@ local function CreatePage(name)
     Layout.Parent = Page
     
     local Pad = Instance.new("UIPadding")
-    Pad.PaddingTop = UDim.new(0, 5); Pad.PaddingBottom = UDim.new(0, 10); Pad.Parent = Page
+    Pad.PaddingTop = UDim.new(0, 5)
+    Pad.PaddingBottom = UDim.new(0, 10)
+    Pad.Parent = Page
     Pages[name] = Page
     return Page
 end
@@ -324,7 +323,7 @@ local function CreateInput(parent, icon, default, callback)
 end
 
 -- ===============================
--- SETUP
+-- SETUP & CONTENT
 -- ===============================
 
 local HomePage = CreatePage("Home")
@@ -462,4 +461,4 @@ UserInputService.InputBegan:Connect(function(i, p)
 end)
 
 SwitchTab("Home")
-game:GetService("StarterGui"):SetCore("SendNotification", {Title="WEBBED GOD V1.1"; Text="LOADED!"; Duration=5})
+game:GetService("StarterGui"):SetCore("SendNotification", {Title="WEBBED GOD V1.2"; Text="FIXED & LOADED!"; Duration=5})
