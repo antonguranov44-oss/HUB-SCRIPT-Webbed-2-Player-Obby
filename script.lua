@@ -461,4 +461,4 @@ UserInputService.InputBegan:Connect(function(i, p)
 end)
 
 SwitchTab("Home")
-game:GetService("StarterGui"):SetCore("SendNotification", {Title="WEBBED GOD V1.2"; Text="FIXED & LOADED!"; Duration=5})
+game:GetService("StarterGui"):SetCore("SendNotification", {Title="WEBBED GOD V1.2"; Text="PRESS TO "M" By: Yan4hic"; Duration=5})
