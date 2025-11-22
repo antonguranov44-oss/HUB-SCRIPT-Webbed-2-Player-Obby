@@ -1,3 +1,13 @@
+--[[
+    🕷️ WEBBED! GOD MODE
+    By: Yan4hic
+    
+    FIXES:
+    - 🚫 REMOVED SCROLLING: Pages are now static Frames. No more floating buttons bug.
+    - 🔒 ANCHORED LAYOUT: Buttons are strictly bound to the menu container.
+    - 🎨 VISUALS: All animations, gradients, and the "alive" background kept.
+--]]
+
 local Players = game:GetService("Players")
 local Workspace = game:GetService("Workspace")
 local RunService = game:GetService("RunService")
@@ -461,4 +471,4 @@ UserInputService.InputBegan:Connect(function(i, p)
 end)
 
 SwitchTab("Home")
-game:GetService("StarterGui"):SetCore("SendNotification", {Title="WEBBED GOD V1.2"; Text="PRESS TO "M" By: Yan4hic"; Duration=5})
+game:GetService("StarterGui"):SetCore("SendNotification", {Title="WEBBED GOD V1.2"; Text="FIXED & LOADED!"; Duration=5})
